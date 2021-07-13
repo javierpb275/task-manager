@@ -15,6 +15,29 @@ MongoClient.connect(
     }
 
     const db = client.db(databaseName);
+
+    db.collection("tasks").insertMany(
+      [
+        {
+          description: "make the bed",
+          completed: true,
+        },
+        {
+          description: "do the shopping",
+          completed: true,
+        },
+        {
+          description: "make dinner",
+          completed: false,
+        },
+      ],
+      (error, result) => {
+        if (error) {
+          return console.log("Unable to insert tasks");
+        }
+        console.log(result.ops);
+      }
+    );
     /*
     db.collection('users').insertOne({
         name: 'Pepe',
@@ -25,7 +48,7 @@ MongoClient.connect(
         }
         console.log(result.ops)//all the documents inserted
     });
-    */
+    
 
     db.collection("users").insertMany(
       [
@@ -45,5 +68,6 @@ MongoClient.connect(
         console.log(result.ops); //all the documents inserted
       }
     );
+    */
   }
 );
