@@ -1,10 +1,19 @@
 //CRUD create read update delete
 
-const mongodb = require("mongodb");
+/*const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
+const ObjectID = mongodb.ObjectID;*/
+
+const { MongoClient, ObjectID } = require('mongodb');
 
 const connectionURL = "mongodb://127.0.0.1:27017"; //or 'mongodb://localhost:27017'
 const databaseName = "task-manager";
+
+const id = new ObjectID();
+console.log(id);
+console.log(id.getTimestamp());
+console.log(id.id.length);
+console.log(id.toHexString().length);
 
 MongoClient.connect(
   connectionURL,
@@ -16,7 +25,7 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    db.collection("tasks").insertMany(
+ /*   db.collection("tasks").insertMany(
       [
         {
           description: "make the bed",
@@ -37,11 +46,12 @@ MongoClient.connect(
         }
         console.log(result.ops);
       }
-    );
-    /*
+    );*/
+
     db.collection('users').insertOne({
-        name: 'Pepe',
-        age: 30
+        _id: id,
+        name: 'Paquito',
+        age: 21
     }, (error, result) => {
         if (error) {
             return console.log('Unable to insert user');
@@ -49,7 +59,7 @@ MongoClient.connect(
         console.log(result.ops)//all the documents inserted
     });
     
-
+/*
     db.collection("users").insertMany(
       [
         {
