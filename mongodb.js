@@ -16,34 +16,5 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    const updatePromise = db.collection('users').updateOne({
-      _id: new ObjectID('60edcc7699b2ad1840e045d0')
-    }, {
-      /*$set: {
-        name: 'Mike'
-      }*/
-      $inc: {
-        age: 1
-      }
-    })
-
-    updatePromise.then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.log(error);
-    });
-
-    db.collection('tasks').updateMany({
-      completed: true
-    }, {
-      $set: {
-        completed: false
-      }
-    }).then(result => {
-      console.log(result.modifiedCount);
-    }).catch(error => {
-      console.log(error);
-    })
-
   }
 );
