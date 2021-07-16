@@ -10,11 +10,28 @@ mongoose.connect(`${connectionURL}/${databaseName}`, {
 
 const User = mongoose.model('User', {
     name: {
-        type: String
+        type: String,
+        required: true
     },
     age: {
-        type: Number
+        type: Number,
+        validate(value) {
+            if(value < 0) {
+                throw new Error('Age must be a positive number');
+            }
+        }
     }
+})
+
+const user1 = new User({
+    name: 'Mery',
+    age: 25
+});
+
+user1.save().then(user => {
+    console.log(user);
+}).catch(error => {
+    console.log('Error!', error)
 })
 
 const Task = mongoose.model('Task', {
@@ -26,10 +43,12 @@ const Task = mongoose.model('Task', {
     }
 });
 
+/*
 const task1 = new Task({
     description: 'Make the bed',
     completed: true
 });
+
 
 task1.save().then(task => {
     console.log(task);
@@ -37,7 +56,7 @@ task1.save().then(task => {
     console.log('Error!', error);
 });
 
-/*
+
 const user1 = new User({
     name: 'Pepe',
     age: 30
