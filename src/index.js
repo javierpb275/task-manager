@@ -59,7 +59,20 @@ app.patch("/users/:id", async (req, res) => {
   } catch(e) {
     res.status(400).send(e);
   }
-})
+});
+
+app.delete("/users/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const user = await User.findByIdAndDelete(_id);
+    if (!user) {
+      return res.status(404).send()
+    }
+    res.status(200).send(user);
+  } catch(e) {
+    res.status(500).send(e);
+  }
+});
 
 app.post("/tasks", async (req, res) => {
   const task = new Task(req.body);
@@ -112,7 +125,20 @@ app.patch("/tasks/:id", async (req, res) => {
   } catch(e) {
     res.status(400).send(e);
   }
-})
+});
+
+app.delete("/tasks/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const task = await Task.findByIdAndDelete(_id);
+    if (!task) {
+      return res.status(404).send()
+    }
+    res.status(200).send(task);
+  } catch(e) {
+    res.status(500).send(e);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
