@@ -3,7 +3,6 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -42,12 +41,14 @@ const userSchema = new mongoose.Schema({
       }
     },
   },
-  tokens: [{
-    token: {
-      type: String,
-      required: true,
-    }
-  }]
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 //user object method to get the user information that we send in the reponse but remove the password and tokens
@@ -57,16 +58,16 @@ userSchema.methods.toJSON = function () {
   delete userObject.password;
   delete userObject.tokens;
   return userObject;
-}
+};
 
 //user object method for generating authentication token:
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({_id: user._id.toString()}, 'thisisnodejs');
-  user.tokens = user.tokens.concat({token});
+  const token = jwt.sign({ _id: user._id.toString() }, "thisisnodejs");
+  user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
-}
+};
 
 //User model static method of userSchema for login endpoint:
 userSchema.statics.findByCredentials = async (email, password) => {

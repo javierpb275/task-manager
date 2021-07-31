@@ -12,17 +12,6 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json(), userRouter, taskRouter);
 
-const pet = {
-  name: 'pepe'
-};
-
-pet.toJSON = function () {
-  console.log(this);
-  return {};
-}
-
-console.log(JSON.stringify(pet));
-
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
