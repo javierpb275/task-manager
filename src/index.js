@@ -6,9 +6,9 @@ const taskRouter = require("./routers/task");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
     res.status(503).send('Site is currently down for maintenance. Check back soon!');
-})
+}) */
 
 app.use(express.json(), userRouter, taskRouter);
 
