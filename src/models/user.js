@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //user object method to get the user information that we send in the reponse but remove the password and tokens
-userSchema.methods.getPublicProfile = function () {
+userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
   delete userObject.password;
