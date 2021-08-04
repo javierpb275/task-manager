@@ -51,6 +51,13 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+//reference to the tasks with property owner = this.user._id
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner'
+})
+
 //user object method to get the user information that we send in the reponse but remove the password and tokens
 userSchema.methods.toJSON = function () {
   const user = this;
