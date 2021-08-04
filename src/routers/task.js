@@ -6,8 +6,8 @@ const router = new express.Router();
 router.post("/tasks", auth, async (req, res) => {
   const task = new Task({
     ...req.body,
-    owner: req.user._id
-  })
+    owner: req.user._id,
+  });
   try {
     await task.save();
     res.status(201).send(task);
@@ -19,7 +19,7 @@ router.post("/tasks", auth, async (req, res) => {
 router.get("/tasks", auth, async (req, res) => {
   try {
     //const tasks = await Task.find({owner: req.user._id});
-    await req.user.populate('tasks').execPopulate();
+    await req.user.populate("tasks").execPopulate();
     res.status(200).send(req.user.tasks);
   } catch (e) {
     res.status(500).send(e);
@@ -27,9 +27,9 @@ router.get("/tasks", auth, async (req, res) => {
 });
 
 router.get("/tasks/:id", auth, async (req, res) => {
-  const _id = req.params.id;
+  const { params, user } = req;
   try {
-    const task = await Task.findOne({_id, owner: req.user._id});
+    const task = await Task.findOne({ _id: params.id, owner: user._id });
     if (!task) {
       return res.status(404).send();
     }
@@ -40,7 +40,7 @@ router.get("/tasks/:id", auth, async (req, res) => {
 });
 
 router.patch("/tasks/:id", auth, async (req, res) => {
-  const { params, body } = req;
+  const { params, body, user } = req;
   //check if what we try to update is NOT one of the properties of task:
   const updates = Object.keys(body);
   const allowedUpdates = ["completed", "description"];
@@ -52,7 +52,7 @@ router.patch("/tasks/:id", auth, async (req, res) => {
   }
   //------------------------
   try {
-    const task = await Task.findOne({_id: params.id, owner: req.user._id});
+    const task = await Task.findOne({ _id: params.id, owner: user._id });
     if (!task) {
       return res.status(404).send();
     }
@@ -67,7 +67,7 @@ router.patch("/tasks/:id", auth, async (req, res) => {
 router.delete("/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
   try {
-    const task = await Task.findOneAndDelete({_id, owner: req.user._id});
+    const task = await Task.findOneAndDelete({ _id, owner: req.user._id });
     if (!task) {
       return res.status(404).send();
     }

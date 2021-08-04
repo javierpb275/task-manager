@@ -53,11 +53,11 @@ const userSchema = new mongoose.Schema({
 });
 
 //reference to the tasks with property owner = this.user._id
-userSchema.virtual('tasks', {
-  ref: 'Task',
-  localField: '_id',
-  foreignField: 'owner'
-})
+userSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "owner",
+});
 
 //user object method to get the user information that we send in the reponse but remove the password and tokens
 userSchema.methods.toJSON = function () {
@@ -96,11 +96,11 @@ userSchema.pre("save", async function (next) {
 });
 
 //delete user tasks when user is deleted:
-userSchema.pre('remove', async function (next) {
+userSchema.pre("remove", async function (next) {
   const user = this;
-  await Task.deleteMany({owner: user._id})
-  next()
-})
+  await Task.deleteMany({ owner: user._id });
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 
