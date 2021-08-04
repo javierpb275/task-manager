@@ -15,3 +15,13 @@ app.use(express.json(), userRouter, taskRouter);
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
+
+const Task = require('./models/task');
+
+const main = async () => {
+  const task = await Task.findById('610ad82e69cb6d3b6469d70e');
+  await task.populate('owner').execPopulate();
+  console.log(task.owner)
+}
+
+main()
