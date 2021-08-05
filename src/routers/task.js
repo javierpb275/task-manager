@@ -16,11 +16,20 @@ router.post("/tasks", auth, async (req, res) => {
   }
 });
 
+//GET /tasks?completed=false
 router.get("/tasks", auth, async (req, res) => {
+  const {query, user} = req;
+  const match = {}
+  if (query.completed) {
+    match.completed = query.completed === 'true';
+  }
   try {
     //const tasks = await Task.find({owner: req.user._id});
-    await req.user.populate("tasks").execPopulate();
-    res.status(200).send(req.user.tasks);
+    await user.populate({
+      path: 'tasks',
+      match
+    }).execPopulate();
+    res.status(200).send(user.tasks);
   } catch (e) {
     res.status(500).send(e);
   }
