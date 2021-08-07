@@ -4,9 +4,10 @@ const auth = require("../middleware/auth");
 const router = new express.Router();
 
 router.post("/tasks", auth, async (req, res) => {
+  const { body, user } = req;
   const task = new Task({
-    ...req.body,
-    owner: req.user._id,
+    ...body,
+    owner: user._id,
   });
   try {
     await task.save();
@@ -20,27 +21,27 @@ router.post("/tasks", auth, async (req, res) => {
 //GET /tasks?limit=10&skip=10
 //GET tasks?sortBy=createdAt:asc(_desc) (: or _)
 router.get("/tasks", auth, async (req, res) => {
-  const {query, user} = req;
-  const match = {}
-  const sort = {}
+  const { query, user } = req;
+  const match = {};
+  const sort = {};
   if (query.completed) {
-    match.completed = query.completed === 'true';
+    match.completed = query.completed === "true";
   }
   if (query.sortBy) {
-    const parts = query.sortBy.split(':');
-    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+    const parts = query.sortBy.split(":");
+    sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
   }
   try {
     //const tasks = await Task.find({owner: req.user._id});
     await user.populate({
-      path: 'tasks',
-      match,
-      options: {
-        limit: parseInt(req.query.limit),
-        skip: parseInt(req.query.skip),
-        sort
-      }
-    }).execPopulate();
+        path: "tasks",
+        match,
+        options: {
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+          sort,
+        },
+      }).execPopulate();
     res.status(200).send(user.tasks);
   } catch (e) {
     res.status(500).send(e);
