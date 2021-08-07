@@ -67,12 +67,13 @@ userSchema.virtual("tasks", {
   foreignField: "owner",
 });
 
-//user object method to get the user information that we send in the reponse but remove the password and tokens
+//user object method to get the user information that we send in the reponse but remove the password, tokens and avatar
 userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.avatar;
   return userObject;
 };
 
