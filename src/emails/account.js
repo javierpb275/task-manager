@@ -1,1 +1,0 @@
-const sendgridAPIKey = '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'
